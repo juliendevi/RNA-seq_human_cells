@@ -1,0 +1,68 @@
+configfile: "config.yaml"
+
+rule all:
+        input:
+                expand('fastqc/{sample}.html', sample=config["samples"]),
+                'kallisto/ref_genome.index',
+                expand('kallisto/{sample}/', sample=config["samples"]), 
+                "multiqc/multiqc.html"
+
+
+
+rule fastqc:
+        input:
+                "data/samples/{sample}_1.fq.gz", 
+                "data/samples/{sample}_2.fq.gz"
+        output:
+                html="fastqc/{sample}.html",
+                zip="fastqc/{sample}_fastqc.zip"
+        params: '--quiet'
+        log:
+                "fastqc/{sample}.log"
+        threads: 1
+        conda:
+                "envs/rnaseq.yml"
+        wrapper:
+                "v1.3.2/bio/fastqc"
+
+rule kallisto_index:
+        input:
+                fasta="data/ref_genome.fasta"
+        output:
+                index="kallisto/ref_genome.index"
+        params:
+                extra=""
+        conda:
+                "envs/rnaseq.yml"
+        threads: 1 
+        wrapper:
+                "v1.3.2/bio/kallisto/index"
+
+rule kallisto_alignment:
+        input:
+                index="kallisto/ref_genome.index",
+                fastq1="data/samples/{sample}_1.fq.gz",
+                fastq2="data/samples/{sample}_2.fq.gz"
+        output:
+               dir=directory("kallisto/{sample}"),
+               stdout="kallisto/{sample}.stdout"
+        params: 
+                "-b 100"
+        conda:
+                "envs/rnaseq.yml"
+        threads: 8
+        shell: 
+                "kallisto quant {params} -i {input.index} -t {threads} -o {output.dir} {input.fastq1} {input.fastq2} &> {output.stdout}"
+
+rule multiqc:
+        input: 
+                expand('fastqc/{sample}_fastqc.zip', sample=config["samples"]), 
+		expand('kallisto/{sample}.stdout', sample=config["samples"])
+        output: 
+                "multiqc/multiqc.html"
+        params:
+                ""
+        conda: 
+                "envs/rnaseq.yml"
+        wrapper:
+                "v1.3.2/bio/multiqc"

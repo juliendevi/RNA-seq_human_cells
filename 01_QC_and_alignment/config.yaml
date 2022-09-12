@@ -1,0 +1,14 @@
+samples: 
+ U1: data/samples/U1_1.fq.gz
+ U2: data/samples/U2_1.fq.gz
+ U3: data/samples/U3_1.fq.gz
+ TK1: data/samples/TK1_1.fq.gz
+ TK2: data/samples/TK2_1.fq.gz
+ TK3: data/samples/TK3_1.fq.gz
+ TD1: data/samples/TD1_1.fq.gz
+ TD3: data/samples/TD3_1.fq.gz
+ TD4: data/samples/TD4_1.fq.gz
+ T1: data/samples/T1_1.fq.gz
+ T3: data/samples/T3_1.fq.gz
+ T4: data/samples/T4_1.fq.gz
+
