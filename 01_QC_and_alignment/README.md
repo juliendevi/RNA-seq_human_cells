@@ -7,11 +7,11 @@ This script uses FastQC v.0.11.9 (Andrews, 2010) to check the quality of the seq
 ## How to run it? 
 
 Create a data folder with a reference transcriptome (named ref_genome.fasta) and a folder samples/ with all the samples (_1.fq.gz and _2.fq.gz for per end sequencing). 
-Fill the _config.yaml file. 
+Fill the config.yaml file. 
 Run snakemake as follow to include the conda environement: 
 
 ```
-snakemake --cores 28 --use_conda 
+snakemake --cores 28 --use-conda 
 ```
 
 ### References 
